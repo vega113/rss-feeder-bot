@@ -59,15 +59,23 @@ def append_content_to_blip(blip, content, type=None):
                     tag['style'] = replace_all(style, fix_styles)
                 cleanup(tag)
     
-    soup = BeautifulSoup(content.strip())
-    cleanup(soup)
-    html = unicode(soup)
+    #soup = BeautifulSoup(content.strip())
+    #cleanup(soup)
+    #html = unicode(soup)
+    html = content.strip()
+    html = html.replace('<div>', '')
+    html = html.replace('</div>', '')
+    html = html.replace('<pre>', '')
+    html = html.replace('</pre>', '')
+    html = html.replace('&amp;', '&')
+    html = html.replace('&lt;', '<')
+    html = html.replace('&gt;', '>')
     # Wave doesn't like tabs
     html = html.replace('\t', ' ')
     # Since its HTML, it should use <br>s instead of line breaks.
     html = html.replace('\r', '').replace('\n', '')
     
-    blip.append_markup(html)
+    blip.append(html)
     
     # Because append_markup doesn't accept images, we replace img tags in the
     # html with placeholders and then replace them with image elements.

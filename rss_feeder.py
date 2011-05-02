@@ -19,11 +19,8 @@ rss_bot = None
 
 def on_wavelet_self_added(event, wavelet):
     # If the root blip is empty, use it. Otherwise make a new blip.
-    if wavelet.root_blip.text == "\n":
-        blip = wavelet.root_blip
-    else:
-        blip = wavelet.reply()
-    add_subscription_form_to_blip(blip)
+    subscribe_wave_to_feed_url(wavelet, 'http://mail-archives.apache.org/mod_mbox/incubator-wave-dev/?format=atom')
+    
 
 def on_wavelet_self_removed(event, wavelet):
     logging.info('we were removed from a wave')
@@ -59,8 +56,10 @@ def unsubscribe_wave(wavelet):
     logging.info('unsubscribed wave')
     subscription = get_wave_subscription(wavelet)
     if subscription is None:
+        logging.info('subscription is None')
         return
     feed = subscription.feed
+    logging.info('deleting' + feed)
     subscription.delete()
     check_remaining_subscriptions_for_feed(feed)
 
@@ -236,7 +235,7 @@ def append_entries_to_wave(wavelet, entries):
             title = link
             link = None
         if title:
-            new_blip.append(element.Line(line_type='h4'))
+            new_blip.append('\n')
             if link:
                 new_blip.append(title, [('link/manual', link)])
                 new_blip.append('\n', [('link/manual', None)])
