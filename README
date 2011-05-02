@@ -1,0 +1,1 @@
+This is a fork of rss-feeder-bot. Unfortunately WIAB doesn't support forms yet, the the code was modified to work only with the wave-dev atom feed.
